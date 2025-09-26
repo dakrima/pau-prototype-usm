@@ -70,6 +70,22 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "status-pending": {
+          DEFAULT: "hsl(var(--status-pending))",
+          foreground: "hsl(var(--status-pending-foreground))",
+        },
+        "status-accepted": {
+          DEFAULT: "hsl(var(--status-accepted))",
+          foreground: "hsl(var(--status-accepted-foreground))",
+        },
+        "status-reviewed": {
+          DEFAULT: "hsl(var(--status-reviewed))",
+          foreground: "hsl(var(--status-reviewed-foreground))",
+        },
+        "status-rejected": {
+          DEFAULT: "hsl(var(--status-rejected))",
+          foreground: "hsl(var(--status-rejected-foreground))",
+        },
       },
       boxShadow: {
         'card': 'var(--shadow-card)',
