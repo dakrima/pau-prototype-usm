@@ -1,8 +1,18 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, User, BookOpen, Edit, Trash2, GripVertical, ExternalLink, CalendarDays } from "lucide-react";
+import { 
+  Clock, 
+  User, 
+  BookOpen, 
+  Edit, 
+  Trash2, 
+  GripVertical,
+  ExternalLink,
+  CalendarDays
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+
 export interface Assistantship {
   id: string;
   courseName: string;
@@ -17,6 +27,7 @@ export interface Assistantship {
   applicationDeadline: string;
   status?: "pending" | "accepted" | "rejected" | "reviewed";
 }
+
 interface AssistantshipCardProps {
   assistantship: Assistantship;
   variant?: "catalog" | "application";
@@ -28,6 +39,7 @@ interface AssistantshipCardProps {
   isDraggable?: boolean;
   dragHandleProps?: any;
 }
+
 const AssistantshipCard = ({
   assistantship,
   variant = "catalog",
@@ -37,22 +49,23 @@ const AssistantshipCard = ({
   onDelete,
   onViewDetails,
   isDraggable = false,
-  dragHandleProps
+  dragHandleProps,
 }: AssistantshipCardProps) => {
   const getStatusBadge = (status?: string) => {
     switch (status) {
       case "pending":
-        return <Badge className="status-badge status-pending bg-slate-600">Pendiente</Badge>;
+        return <Badge className="status-badge status-pending">Pendiente</Badge>;
       case "accepted":
-        return <Badge className="status-badge status-accepted bg-lime-600">Aceptada</Badge>;
+        return <Badge className="status-badge status-accepted">Aceptada</Badge>;
       case "rejected":
         return <Badge className="status-badge status-rejected">Rechazada</Badge>;
       case "reviewed":
-        return <Badge className="status-badge status-reviewed bg-yellow-500">En Revisión</Badge>;
+        return <Badge className="status-badge status-reviewed">En Revisión</Badge>;
       default:
         return null;
     }
   };
+
   const getTypeLabel = (type: string) => {
     switch (type) {
       case "theoretical":
@@ -65,12 +78,19 @@ const AssistantshipCard = ({
         return type;
     }
   };
-  return <Card className={cn("p-6 shadow-card card-hover transition-all duration-200", variant === "application" && "bg-gradient-subtle")}>
+
+  return (
+    <Card className={cn(
+      "p-6 shadow-card card-hover transition-all duration-200",
+      variant === "application" && "bg-gradient-subtle"
+    )}>
       <div className="flex items-start justify-between gap-4">
         {/* Drag Handle */}
-        {isDraggable && <div {...dragHandleProps} className="drag-handle mt-1">
+        {isDraggable && (
+          <div {...dragHandleProps} className="drag-handle mt-1">
             <GripVertical className="h-4 w-4" />
-          </div>}
+          </div>
+        )}
 
         {/* Content */}
         <div className="flex-1 min-w-0">
@@ -105,38 +125,70 @@ const AssistantshipCard = ({
             </div>
           </div>
 
-          {assistantship.description && <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+          {assistantship.description && (
+            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
               {assistantship.description}
-            </p>}
+            </p>
+          )}
         </div>
       </div>
 
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t border-border">
         <div className="flex space-x-2">
-          {variant === "catalog" && onApply && <Button onClick={() => onApply(assistantship.id)} size="sm">
+          {variant === "catalog" && onApply && (
+            <Button onClick={() => onApply(assistantship.id)} size="sm">
               Postular
-            </Button>}
+            </Button>
+          )}
           
-          {variant === "application" && <>
-              {onEdit && <Button onClick={() => onEdit(assistantship.id)} variant="outline" size="sm">
+          {variant === "application" && (
+            <>
+              {onEdit && (
+                <Button 
+                  onClick={() => onEdit(assistantship.id)} 
+                  variant="outline" 
+                  size="sm"
+                >
                   <Edit className="h-3 w-3 mr-1" />
                   Editar
-                </Button>}
-              {onWithdraw && assistantship.status === "pending" && <Button onClick={() => onWithdraw(assistantship.id)} variant="outline" size="sm">
+                </Button>
+              )}
+              {onWithdraw && assistantship.status === "pending" && (
+                <Button 
+                  onClick={() => onWithdraw(assistantship.id)} 
+                  variant="outline" 
+                  size="sm"
+                >
                   Retirar
-                </Button>}
-              {onDelete && <Button onClick={() => onDelete(assistantship.id)} variant="destructive" size="sm">
+                </Button>
+              )}
+              {onDelete && (
+                <Button 
+                  onClick={() => onDelete(assistantship.id)} 
+                  variant="destructive" 
+                  size="sm"
+                >
                   <Trash2 className="h-3 w-3 mr-1" />
                   Eliminar
-                </Button>}
-            </>}
+                </Button>
+              )}
+            </>
+          )}
         </div>
 
-        {onViewDetails && <Button onClick={() => onViewDetails(assistantship.id)} variant="ghost" size="sm">
+        {onViewDetails && (
+          <Button 
+            onClick={() => onViewDetails(assistantship.id)} 
+            variant="ghost" 
+            size="sm"
+          >
             Ver más <ExternalLink className="h-3 w-3 ml-1" />
-          </Button>}
+          </Button>
+        )}
       </div>
-    </Card>;
+    </Card>
+  );
 };
+
 export default AssistantshipCard;
