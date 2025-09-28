@@ -76,20 +76,49 @@ const Dashboard = () => {
     });
   };
 
-  const handleWithdraw = (id: string) => {
-    setApplications(prev => prev.filter(app => app.id !== id));
-    toast({
-      title: "Postulación retirada",
-      description: "Tu postulación ha sido retirada exitosamente.",
-      variant: "destructive",
-    });
-  };
-
   const handleDelete = (id: string) => {
     setApplications(prev => prev.filter(app => app.id !== id));
     toast({
       title: "Postulación eliminada",
       description: "La postulación ha sido eliminada permanentemente.",
+    });
+  };
+
+  const handleAccept = (id: string) => {
+    setApplications(prev => 
+      prev.map(app => 
+        app.id === id ? { ...app, status: "accepted" as const } : app
+      )
+    );
+    toast({
+      title: "Ayudantía aceptada",
+      description: "Has aceptado la ayudantía exitosamente.",
+    });
+  };
+
+  const handleReject = (id: string) => {
+    setApplications(prev => 
+      prev.map(app => 
+        app.id === id ? { ...app, status: "rejected" as const } : app
+      )
+    );
+    toast({
+      title: "Ayudantía rechazada",
+      description: "Has rechazado la ayudantía.",
+      variant: "destructive",
+    });
+  };
+
+  const handleResign = (id: string) => {
+    setApplications(prev => 
+      prev.map(app => 
+        app.id === id ? { ...app, status: "rejected" as const } : app
+      )
+    );
+    toast({
+      title: "Renuncia exitosa",
+      description: "Has renunciado a la ayudantía.",
+      variant: "destructive",
     });
   };
 
@@ -216,8 +245,10 @@ const Dashboard = () => {
                             isDraggable
                             dragHandleProps={provided.dragHandleProps}
                             onEdit={handleEdit}
-                            onWithdraw={handleWithdraw}
                             onDelete={handleDelete}
+                            onAccept={handleAccept}
+                            onReject={handleReject}
+                            onResign={handleResign}
                             onViewDetails={handleViewDetails}
                           />
                         </div>

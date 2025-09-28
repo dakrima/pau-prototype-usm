@@ -34,8 +34,10 @@ interface AssistantshipCardProps {
   variant?: "catalog" | "application";
   onApply?: (id: string) => void;
   onEdit?: (id: string) => void;
-  onWithdraw?: (id: string) => void;
   onDelete?: (id: string) => void;
+  onAccept?: (id: string) => void;
+  onReject?: (id: string) => void;
+  onResign?: (id: string) => void;
   onViewDetails?: (id: string) => void;
   isDraggable?: boolean;
   dragHandleProps?: any;
@@ -46,8 +48,10 @@ const AssistantshipCard = ({
   variant = "catalog",
   onApply,
   onEdit,
-  onWithdraw,
   onDelete,
+  onAccept,
+  onReject,
+  onResign,
   onViewDetails,
   isDraggable = false,
   dragHandleProps,
@@ -156,30 +160,55 @@ const AssistantshipCard = ({
                   Editar
                 </Button>
               )}
-              {onWithdraw && (assistantship.status === "pending" || assistantship.status === "pre-selected") && (
+
+              {/* Pending status: Only Delete button */}
+              {assistantship.status === "pending" && onDelete && (
                 <Button 
-                  onClick={() => onWithdraw(assistantship.id)} 
-                  variant="outline" 
+                  onClick={() => onDelete(assistantship.id)} 
+                  variant="destructive" 
                   size="sm"
                 >
-                  Retirar
+                  <Trash2 className="h-3 w-3 mr-1" />
+                  Eliminar
                 </Button>
               )}
+
+              {/* Pre-Selected status: Accept and Reject buttons */}
               {assistantship.status === "pre-selected" && (
+                <>
+                  {onAccept && (
+                    <Button 
+                      onClick={() => onAccept(assistantship.id)} 
+                      size="sm"
+                    >
+                      Aceptar
+                    </Button>
+                  )}
+                  {onReject && (
+                    <Button 
+                      onClick={() => onReject(assistantship.id)} 
+                      variant="outline" 
+                      size="sm"
+                    >
+                      Rechazar
+                    </Button>
+                  )}
+                </>
+              )}
+
+              {/* Accepted status: Resign button */}
+              {assistantship.status === "accepted" && onResign && (
                 <Button 
-                  onClick={() => {
-                    // Handle accept pre-selection
-                    toast({
-                      title: "Ayudantía aceptada",
-                      description: "Has aceptado la ayudantía exitosamente.",
-                    });
-                  }} 
+                  onClick={() => onResign(assistantship.id)} 
+                  variant="destructive" 
                   size="sm"
                 >
-                  Aceptar
+                  Renunciar
                 </Button>
               )}
-              {onDelete && (
+
+              {/* Rejected status: Only Delete button */}
+              {assistantship.status === "rejected" && onDelete && (
                 <Button 
                   onClick={() => onDelete(assistantship.id)} 
                   variant="destructive" 
