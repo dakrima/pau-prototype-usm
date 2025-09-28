@@ -51,7 +51,7 @@ const Dashboard = () => {
       requirements: ["Nota mínima 5.5", "Experiencia en laboratorio"],
       description: "Supervisión y apoyo en experimentos de laboratorio de química general.",
       applicationDeadline: "12 Oct",
-      status: "reviewed"
+      status: "pre-selected"
     }
   ]);
 
@@ -101,9 +101,9 @@ const Dashboard = () => {
   const getStatusCounts = () => {
     const counts = {
       pending: applications.filter(app => app.status === "pending").length,
+      "pre-selected": applications.filter(app => app.status === "pre-selected").length,
       accepted: applications.filter(app => app.status === "accepted").length,
       rejected: applications.filter(app => app.status === "rejected").length,
-      reviewed: applications.filter(app => app.status === "reviewed").length,
     };
     return counts;
   };
@@ -140,10 +140,10 @@ const Dashboard = () => {
         
         <Card className="p-4 text-center">
           <div className="flex items-center justify-center mb-2">
-            <FileText className="h-5 w-5 text-info" />
+            <FileText className="h-5 w-5 text-warning" />
           </div>
-          <p className="text-2xl font-bold text-foreground">{statusCounts.reviewed}</p>
-          <p className="text-sm text-muted-foreground">En Revisión</p>
+          <p className="text-2xl font-bold text-foreground">{statusCounts["pre-selected"]}</p>
+          <p className="text-sm text-muted-foreground">Pre-Seleccionados</p>
         </Card>
         
         <Card className="p-4 text-center">

@@ -12,6 +12,7 @@ import {
   CalendarDays
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 export interface Assistantship {
   id: string;
@@ -25,7 +26,7 @@ export interface Assistantship {
   requirements: string[];
   description: string;
   applicationDeadline: string;
-  status?: "pending" | "accepted" | "rejected" | "reviewed";
+  status?: "pending" | "pre-selected" | "accepted" | "rejected";
 }
 
 interface AssistantshipCardProps {
@@ -51,16 +52,17 @@ const AssistantshipCard = ({
   isDraggable = false,
   dragHandleProps,
 }: AssistantshipCardProps) => {
+  const { toast } = useToast();
   const getStatusBadge = (status?: string) => {
     switch (status) {
       case "pending":
         return <Badge className="status-badge status-pending">Pendiente</Badge>;
+      case "pre-selected":
+        return <Badge className="status-badge status-pre-selected">Pre-Seleccionado</Badge>;
       case "accepted":
         return <Badge className="status-badge status-accepted">Aceptada</Badge>;
       case "rejected":
         return <Badge className="status-badge status-rejected">Rechazada</Badge>;
-      case "reviewed":
-        return <Badge className="status-badge status-reviewed">En Revisión</Badge>;
       default:
         return null;
     }
@@ -154,13 +156,27 @@ const AssistantshipCard = ({
                   Editar
                 </Button>
               )}
-              {onWithdraw && assistantship.status === "pending" && (
+              {onWithdraw && (assistantship.status === "pending" || assistantship.status === "pre-selected") && (
                 <Button 
                   onClick={() => onWithdraw(assistantship.id)} 
                   variant="outline" 
                   size="sm"
                 >
                   Retirar
+                </Button>
+              )}
+              {assistantship.status === "pre-selected" && (
+                <Button 
+                  onClick={() => {
+                    // Handle accept pre-selection
+                    toast({
+                      title: "Ayudantía aceptada",
+                      description: "Has aceptado la ayudantía exitosamente.",
+                    });
+                  }} 
+                  size="sm"
+                >
+                  Aceptar
                 </Button>
               )}
               {onDelete && (

@@ -171,19 +171,19 @@ All colors MUST be HSL.
   }
 
   .status-pending {
+    @apply bg-slate-100 text-slate-700 border border-slate-200;
+  }
+
+  .status-pre-selected {
     @apply bg-warning/10 text-warning-foreground border border-warning/20;
   }
 
   .status-accepted {
-    @apply bg-success/10 text-success-foreground border border-success/20;
+    @apply bg-destructive/10 text-destructive-foreground border border-destructive/20;
   }
 
   .status-rejected {
     @apply bg-destructive/10 text-destructive-foreground border border-destructive/20;
-  }
-
-  .status-reviewed {
-    @apply bg-info/10 text-info-foreground border border-info/20;
   }
 
   .drag-handle {
