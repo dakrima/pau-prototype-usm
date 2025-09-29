@@ -113,7 +113,19 @@ const Explore = () => {
     "Ingeniería Química"
   ];
 
+  const hasActiveFilters = useMemo(() => {
+    return searchTerm !== "" || 
+           selectedDepartment !== "all" || 
+           selectedType !== "all" || 
+           selectedCampus !== "all" || 
+           selectedProgram !== "all";
+  }, [searchTerm, selectedDepartment, selectedType, selectedCampus, selectedProgram]);
+
   const filteredAssistantships = useMemo(() => {
+    if (!hasActiveFilters) {
+      return [];
+    }
+    
     return availableAssistantships.filter((assistantship) => {
       const matchesSearch = 
         assistantship.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -134,7 +146,7 @@ const Explore = () => {
 
       return matchesSearch && matchesDepartment && matchesType && matchesCampus && matchesProgram;
     });
-  }, [searchTerm, selectedDepartment, selectedType, selectedCampus, selectedProgram]);
+  }, [searchTerm, selectedDepartment, selectedType, selectedCampus, selectedProgram, hasActiveFilters]);
 
   const handleApply = (id: string) => {
     // Navigate to application form or open modal
@@ -266,7 +278,17 @@ const Explore = () => {
       </div>
 
       {/* Assistantships Grid */}
-      {filteredAssistantships.length === 0 ? (
+      {!hasActiveFilters ? (
+        <Card className="p-8 text-center">
+          <Search className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium text-foreground mb-2">
+            Comienza tu búsqueda
+          </h3>
+          <p className="text-muted-foreground">
+            Utiliza la barra de búsqueda o los filtros para encontrar ayudantías disponibles.
+          </p>
+        </Card>
+      ) : filteredAssistantships.length === 0 ? (
         <Card className="p-8 text-center">
           <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium text-foreground mb-2">
