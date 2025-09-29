@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { 
   Clock, 
   User, 
@@ -42,6 +43,8 @@ interface AssistantshipCardProps {
   onViewDetails?: (id: string) => void;
   isDraggable?: boolean;
   dragHandleProps?: any;
+  isSelected?: boolean;
+  onSelect?: (id: string, checked: boolean) => void;
 }
 
 const AssistantshipCard = ({
@@ -56,6 +59,8 @@ const AssistantshipCard = ({
   onViewDetails,
   isDraggable = false,
   dragHandleProps,
+  isSelected = false,
+  onSelect,
 }: AssistantshipCardProps) => {
   const { toast } = useToast();
   const getStatusBadge = (status?: string) => {
@@ -89,9 +94,20 @@ const AssistantshipCard = ({
   return (
     <Card className={cn(
       "p-6 shadow-card card-hover transition-all duration-200",
-      variant === "application" && "bg-gradient-subtle"
+      variant === "application" && "bg-gradient-subtle",
+      isSelected && "ring-2 ring-primary"
     )}>
       <div className="flex items-start justify-between gap-4">
+        {/* Checkbox for selection */}
+        {variant === "application" && onSelect && (
+          <div className="mt-1">
+            <Checkbox 
+              checked={isSelected}
+              onCheckedChange={(checked) => onSelect(assistantship.id, checked as boolean)}
+            />
+          </div>
+        )}
+
         {/* Drag Handle */}
         {isDraggable && (
           <div {...dragHandleProps} className="drag-handle mt-1">

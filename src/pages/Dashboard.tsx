@@ -4,8 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import AssistantshipCard, { Assistantship } from "@/components/AssistantshipCard";
-import { AlertTriangle, CheckCircle, Clock, FileText, Plus } from "lucide-react";
+import { AlertTriangle, CheckCircle, Clock, FileText, Plus, Trash2, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -58,6 +68,9 @@ const Dashboard = () => {
     }
   ]);
 
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
+
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
@@ -81,11 +94,73 @@ const Dashboard = () => {
 
   const handleDelete = (id: string) => {
     setApplications(prev => prev.filter(app => app.id !== id));
+    setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
     toast({
       title: "Postulación eliminada",
       description: "La postulación ha sido eliminada permanentemente.",
     });
   };
+
+  const handleSelect = (id: string, checked: boolean) => {
+    setSelectedIds(prev => 
+      checked ? [...prev, id] : prev.filter(selectedId => selectedId !== id)
+    );
+  };
+
+  const handleBulkDelete = () => {
+    const selectedStatuses = applications
+      .filter(app => selectedIds.includes(app.id))
+      .map(app => app.status);
+    
+    setApplications(prev => prev.filter(app => !selectedIds.includes(app.id)));
+    setSelectedIds([]);
+    setShowBulkDeleteDialog(false);
+    
+    toast({
+      title: "Postulaciones eliminadas",
+      description: `Se eliminaron ${selectedIds.length} postulación(es) exitosamente.`,
+    });
+  };
+
+  const getBulkActionStatus = () => {
+    if (selectedIds.length === 0) return null;
+    
+    const selectedApps = applications.filter(app => selectedIds.includes(app.id));
+    const statuses = new Set(selectedApps.map(app => app.status));
+    
+    // If mixed statuses
+    if (statuses.size > 1) {
+      return { 
+        type: "mixed" as const, 
+        message: "Para usar acciones en bloque, selecciona postulaciones del mismo estado.",
+        canDelete: false
+      };
+    }
+    
+    const status = Array.from(statuses)[0];
+    
+    // If pre-selected or accepted
+    if (status === "pre-selected" || status === "accepted") {
+      return { 
+        type: "restricted" as const, 
+        message: "No hay acciones en bloque disponibles para postulaciones Pre-Seleccionado o Aceptada.",
+        canDelete: false
+      };
+    }
+    
+    // If pending or rejected
+    if (status === "pending" || status === "rejected") {
+      return { 
+        type: "deletable" as const, 
+        status: status === "pending" ? "Postulación realizada" : "Rechazada",
+        canDelete: true
+      };
+    }
+    
+    return null;
+  };
+
+  const bulkActionStatus = getBulkActionStatus();
 
   const handleAccept = (id: string) => {
     setApplications(prev => 
@@ -195,6 +270,46 @@ const Dashboard = () => {
         </Card>
       </div>
 
+      {/* Bulk Actions Bar */}
+      {selectedIds.length > 0 && bulkActionStatus && (
+        <Card className="p-4 bg-accent/50 border-accent">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-foreground">
+                  {selectedIds.length} seleccionada(s)
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedIds([])}
+                  className="h-6 w-6 p-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              {!bulkActionStatus.canDelete && (
+                <p className="text-sm text-muted-foreground">
+                  {bulkActionStatus.message}
+                </p>
+              )}
+            </div>
+            
+            {bulkActionStatus.canDelete && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setShowBulkDeleteDialog(true)}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Eliminar
+              </Button>
+            )}
+          </div>
+        </Card>
+      )}
+
       {/* Applications List */}
       {applications.length === 0 ? (
         <Card className="p-8 text-center">
@@ -253,6 +368,8 @@ const Dashboard = () => {
                             onReject={handleReject}
                             onResign={handleResign}
                             onViewDetails={handleViewDetails}
+                            isSelected={selectedIds.includes(application.id)}
+                            onSelect={handleSelect}
                           />
                         </div>
                       )}
@@ -265,6 +382,32 @@ const Dashboard = () => {
           </DragDropContext>
         </div>
       )}
+
+      {/* Bulk Delete Confirmation Dialog */}
+      <AlertDialog open={showBulkDeleteDialog} onOpenChange={setShowBulkDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que deseas eliminar {selectedIds.length} postulación(es)?
+              {bulkActionStatus?.type === "deletable" && (
+                <span className="block mt-2 font-medium">
+                  Estado: {bulkActionStatus.status}
+                </span>
+              )}
+              <span className="block mt-2 text-destructive">
+                Esta acción no se puede deshacer.
+              </span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleBulkDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
