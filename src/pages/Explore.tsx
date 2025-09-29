@@ -192,23 +192,6 @@ const Explore = () => {
 
           <div>
             <label className="text-sm font-medium text-foreground mb-2 block">
-              Campus
-            </label>
-            <Select value={selectedCampus} onValueChange={setSelectedCampus}>
-              <SelectTrigger>
-                <SelectValue placeholder="Todos" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                {campuses.map(campus => (
-                  <SelectItem key={campus} value={campus}>{campus}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="text-sm font-medium text-foreground mb-2 block">
               Departamento
             </label>
             <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
@@ -237,6 +220,23 @@ const Explore = () => {
                 <SelectItem value="theoretical">Teórica</SelectItem>
                 <SelectItem value="practical">Práctica</SelectItem>
                 <SelectItem value="laboratory">Laboratorio</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-2 block">
+              Campus
+            </label>
+            <Select value={selectedCampus} onValueChange={setSelectedCampus}>
+              <SelectTrigger>
+                <SelectValue placeholder="Todos" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos</SelectItem>
+                {campuses.map(campus => (
+                  <SelectItem key={campus} value={campus}>{campus}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
