@@ -21,13 +21,13 @@ const Explore = () => {
     {
       id: "asst-1",
       courseName: "Estructuras de Datos y Algoritmos",
-      courseCode: "IWI-131",
-      professor: "Dr. Pedro Rodríguez",
+      courseCode: "INF134",
+      professor: "Ricardo Antonio Salas Letelier",
       department: "Informática",
       program: "Ingeniería Civil Informática",
       campus: "San Joaquín",
       type: "theoretical",
-      hours: 4,
+      hours: 15,
       requirements: ["Nota mínima 5.5", "Conocimientos en C++"],
       description: "Apoyo en clases auxiliares de estructuras de datos, algoritmos de ordenamiento y búsqueda. Revisión de tareas y apoyo a estudiantes.",
       applicationDeadline: "25 Oct"
@@ -175,12 +175,6 @@ const Explore = () => {
             Descubre ayudantías disponibles para el semestre actual
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Badge variant="outline" className="text-accent-foreground border-accent">
-            <Calendar className="h-3 w-3 mr-1" />
-            {availableAssistantships.length} disponibles
-          </Badge>
-        </div>
       </div>
 
       {/* Filters */}
@@ -194,7 +188,7 @@ const Explore = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Curso, profesor o código..."
+                placeholder="Curso, profesor o sigla..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
