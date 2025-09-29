@@ -60,13 +60,13 @@ const AssistantshipCard = ({
   const getStatusBadge = (status?: string) => {
     switch (status) {
       case "pending":
-        return <Badge className="status-badge status-pending">Pendiente</Badge>;
+        return <Badge className="bg-gray-500 text-white text-sm font-medium px-2 py-1 rounded cursor-default pointer-events-none">Postulación realizada</Badge>;
       case "pre-selected":
-        return <Badge className="status-badge status-pre-selected">Pre-Seleccionado</Badge>;
+        return <Badge className="bg-yellow-500 text-white text-sm font-medium px-2 py-1 rounded cursor-default pointer-events-none">Pre-Seleccionado</Badge>;
       case "accepted":
-        return <Badge className="status-badge status-accepted">Aceptada</Badge>;
+        return <Badge className="bg-green-500 text-white text-sm font-medium px-2 py-1 rounded cursor-default pointer-events-none">Aceptada</Badge>;
       case "rejected":
-        return <Badge className="status-badge status-rejected">Rechazada</Badge>;
+        return <Badge className="bg-red-500 text-white text-sm font-medium px-2 py-1 rounded cursor-default pointer-events-none">Rechazada</Badge>;
       default:
         return null;
     }
@@ -187,7 +187,7 @@ const AssistantshipCard = ({
                   {onReject && (
                     <Button 
                       onClick={() => onReject(assistantship.id)} 
-                      variant="outline" 
+                      variant="destructive" 
                       size="sm"
                     >
                       Rechazar
