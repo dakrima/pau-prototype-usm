@@ -15,6 +15,7 @@ const Explore = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedProgram, setSelectedProgram] = useState("all");
+  const [selectedCampus, setSelectedCampus] = useState("all");
 
   const availableAssistantships: Assistantship[] = [
     {
@@ -24,6 +25,7 @@ const Explore = () => {
       professor: "Dr. Pedro Rodríguez",
       department: "Informática",
       program: "Ingeniería Civil Informática",
+      campus: "San Joaquín",
       type: "theoretical",
       hours: 4,
       requirements: ["Nota mínima 5.5", "Conocimientos en C++"],
@@ -37,6 +39,7 @@ const Explore = () => {
       professor: "Dra. Carmen López",
       department: "Física",
       program: "Ingeniería Civil",
+      campus: "Vitacura",
       type: "laboratory",
       hours: 6,
       requirements: ["Nota mínima 6.0", "Experiencia en laboratorio"],
@@ -50,6 +53,7 @@ const Explore = () => {
       professor: "Dr. Luis Martínez",
       department: "Matemática",
       program: "Ingeniería Civil",
+      campus: "Casa Central",
       type: "theoretical",
       hours: 4,
       requirements: ["Nota mínima 6.5", "Dominio de matrices"],
@@ -63,6 +67,7 @@ const Explore = () => {
       professor: "Dr. Roberto Sánchez",
       department: "Mecánica",
       program: "Ingeniería Civil Mecánica",
+      campus: "Viña del Mar",
       type: "practical",
       hours: 5,
       requirements: ["Nota mínima 5.8", "Conocimientos de física"],
@@ -76,6 +81,7 @@ const Explore = () => {
       professor: "Dra. Isabel Vargas",
       department: "Química",
       program: "Ingeniería Química",
+      campus: "Concepción",
       type: "laboratory",
       hours: 8,
       requirements: ["Nota mínima 6.0", "Seguridad en laboratorio"],
@@ -89,6 +95,7 @@ const Explore = () => {
       professor: "Dr. Mario Fernández",
       department: "Informática",
       program: "Ingeniería Civil Informática",
+      campus: "San Joaquín",
       type: "practical",
       hours: 6,
       requirements: ["Nota mínima 5.5", "SQL avanzado"],
@@ -98,6 +105,7 @@ const Explore = () => {
   ];
 
   const departments = ["Informática", "Matemática", "Física", "Química", "Mecánica"];
+  const campuses = ["San Joaquín", "Vitacura", "Casa Central", "Viña del Mar", "Concepción"];
   const programs = [
     "Ingeniería Civil Informática",
     "Ingeniería Civil",
@@ -118,12 +126,15 @@ const Explore = () => {
       const matchesType = 
         selectedType === "all" || assistantship.type === selectedType;
       
+      const matchesCampus = 
+        selectedCampus === "all" || assistantship.campus === selectedCampus;
+      
       const matchesProgram = 
         selectedProgram === "all" || assistantship.program === selectedProgram;
 
-      return matchesSearch && matchesDepartment && matchesType && matchesProgram;
+      return matchesSearch && matchesDepartment && matchesType && matchesCampus && matchesProgram;
     });
-  }, [searchTerm, selectedDepartment, selectedType, selectedProgram]);
+  }, [searchTerm, selectedDepartment, selectedType, selectedCampus, selectedProgram]);
 
   const handleApply = (id: string) => {
     // Navigate to application form or open modal
@@ -138,6 +149,7 @@ const Explore = () => {
     setSearchTerm("");
     setSelectedDepartment("all");
     setSelectedType("all");
+    setSelectedCampus("all");
     setSelectedProgram("all");
   };
 
@@ -161,7 +173,7 @@ const Explore = () => {
 
       {/* Filters */}
       <Card className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 items-end">
           <div className="lg:col-span-2">
             <label className="text-sm font-medium text-foreground mb-2 block">
               Buscar
@@ -208,6 +220,23 @@ const Explore = () => {
                 <SelectItem value="theoretical">Teórica</SelectItem>
                 <SelectItem value="practical">Práctica</SelectItem>
                 <SelectItem value="laboratory">Laboratorio</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-2 block">
+              Campus
+            </label>
+            <Select value={selectedCampus} onValueChange={setSelectedCampus}>
+              <SelectTrigger>
+                <SelectValue placeholder="Todos" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos</SelectItem>
+                {campuses.map(campus => (
+                  <SelectItem key={campus} value={campus}>{campus}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

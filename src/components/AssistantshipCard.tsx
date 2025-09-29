@@ -21,6 +21,7 @@ export interface Assistantship {
   professor: string;
   department: string;
   program: string;
+  campus: string;
   type: "theoretical" | "practical" | "laboratory";
   hours: number;
   requirements: string[];

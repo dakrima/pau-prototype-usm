@@ -45,6 +45,7 @@ const AssistantshipDetail = () => {
     professor: "Dr. María González",
     department: "Informática",
     program: "Ingeniería Civil Informática",
+    campus: "San Joaquín",
     type: "practical",
     hours: 6,
     requirements: [
