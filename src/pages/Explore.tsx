@@ -7,9 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import AssistantshipCard, { Assistantship } from "@/components/AssistantshipCard";
 import { Search, Filter, Calendar, BookOpen, Users } from "lucide-react";
+import { useApplications } from "@/hooks/use-applications";
 
 const Explore = () => {
   const { toast } = useToast();
+  const { addApplication, isApplied } = useApplications();
   
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
@@ -149,8 +151,14 @@ const Explore = () => {
   }, [searchTerm, selectedDepartment, selectedType, selectedCampus, selectedProgram, hasActiveFilters]);
 
   const handleApply = (id: string) => {
-    // Navigate to application form or open modal
-    window.location.href = `/assistantship/${id}`;
+    const assistantship = availableAssistantships.find(a => a.id === id);
+    if (assistantship) {
+      addApplication(assistantship);
+      toast({
+        title: "Postulación exitosa",
+        description: `Has postulado a ${assistantship.courseName}`,
+      });
+    }
   };
 
   const handleViewDetails = (id: string) => {

@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import AssistantshipCard, { Assistantship } from "@/components/AssistantshipCard";
 import { AlertTriangle, CheckCircle, Clock, FileText, Plus, Trash2, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useApplications } from "@/hooks/use-applications";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,54 +20,7 @@ import {
 
 const Dashboard = () => {
   const { toast } = useToast();
-  
-  const [applications, setApplications] = useState<Assistantship[]>([
-    {
-      id: "app-1",
-      courseName: "Programación Orientada a Objetos",
-      courseCode: "IWI-131",
-      professor: "Dr. María González",
-      department: "Informática",
-      program: "Ingeniería Civil Informática",
-      campus: "San Joaquín",
-      type: "practical",
-      hours: 6,
-      requirements: ["Nota mínima 5.0", "Experiencia en Java"],
-      description: "Ayudantía para apoyo en laboratorios de programación Java y corrección de tareas.",
-      applicationDeadline: "15 Oct",
-      status: "pending"
-    },
-    {
-      id: "app-2",
-      courseName: "Cálculo Diferencial e Integral",
-      courseCode: "MAT-021",
-      professor: "Dr. Carlos Herrera",
-      department: "Matemática",
-      program: "Ingeniería Civil",
-      campus: "Casa Central",
-      type: "theoretical",
-      hours: 4,
-      requirements: ["Nota mínima 6.0", "Haber cursado Cálculo II"],
-      description: "Apoyo en clases auxiliares y resolución de ejercicios de cálculo.",
-      applicationDeadline: "20 Oct",
-      status: "accepted"
-    },
-    {
-      id: "app-3",
-      courseName: "Laboratorio de Química",
-      courseCode: "QUI-010",
-      professor: "Dra. Ana Morales",
-      department: "Química",
-      program: "Ingeniería Química",
-      campus: "Vitacura",
-      type: "laboratory",
-      hours: 8,
-      requirements: ["Nota mínima 5.5", "Experiencia en laboratorio"],
-      description: "Supervisión y apoyo en experimentos de laboratorio de química general.",
-      applicationDeadline: "12 Oct",
-      status: "pre-selected"
-    }
-  ]);
+  const { applications, setApplications } = useApplications();
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
