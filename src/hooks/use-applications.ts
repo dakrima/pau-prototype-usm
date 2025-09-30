@@ -14,9 +14,11 @@ export const useApplications = () => {
   }, [applications]);
 
   const addApplication = (assistantship: Assistantship) => {
+
+    const status = assistantship.department === "Matemática" ? "accepted" : "pending";
     const newApplication: Assistantship = {
       ...assistantship,
-      status: "pending",
+      status,
     };
     setApplications(prev => [...prev, newApplication]);
   };

@@ -46,7 +46,7 @@ const AssistantshipDetail = () => {
     department: "Informática",
     program: "Ingeniería Civil Informática",
     campus: "San Joaquín",
-    type: "practical",
+    type: "laboratory",
     hours: 6,
     requirements: [
       "Nota mínima 5.0 en el ramo",

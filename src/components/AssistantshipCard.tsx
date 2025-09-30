@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { MapPin } from "lucide-react";
 import { 
   Clock, 
   User, 
@@ -23,7 +24,7 @@ export interface Assistantship {
   department: string;
   program: string;
   campus: string;
-  type: "theoretical" | "practical" | "laboratory";
+  type: "theoretical" | "laboratory" | "Research" | "administrative" | "Grader";
   hours: number;
   requirements: string[];
   description: string;
@@ -81,11 +82,15 @@ const AssistantshipCard = ({
   const getTypeLabel = (type: string) => {
     switch (type) {
       case "theoretical":
-        return "Teórica";
-      case "practical":
-        return "Práctica";
+        return "Contacto";
+      case "Grader":
+        return "Corrector";
       case "laboratory":
         return "Laboratorio";
+      case "Research":
+        return "Investigación";
+      case "Administrative":
+        return "Administrativa";
       default:
         return type;
     }
@@ -136,15 +141,15 @@ const AssistantshipCard = ({
             </div>
             <div className="flex items-center space-x-2 text-sm">
               <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="text-foreground">{assistantship.hours}h semanales</span>
+              <span className="text-foreground">{assistantship.hours}h mensuales</span>
             </div>
             <div className="flex items-center space-x-2 text-sm">
               <BookOpen className="h-4 w-4 text-muted-foreground" />
               <span className="text-foreground">{getTypeLabel(assistantship.type)}</span>
             </div>
             <div className="flex items-center space-x-2 text-sm">
-              <CalendarDays className="h-4 w-4 text-muted-foreground" />
-              <span className="text-foreground">Hasta {assistantship.applicationDeadline}</span>
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <span className="text-foreground">Campus {assistantship.campus}</span>
             </div>
           </div>
 
