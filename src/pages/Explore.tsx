@@ -7,13 +7,14 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useApplications } from "@/hooks/use-applications";
+import { useApplicationsContext } from "@/context/ApplicationsContext";
 import AssistantshipCard, { Assistantship } from "@/components/AssistantshipCard";
 import { Search, Filter, Calendar, BookOpen, Users } from "lucide-react";
 
 const Explore = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { addApplication, isApplied } = useApplications();
+  const { addApplication, isApplied } = useApplicationsContext();
   
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("all");

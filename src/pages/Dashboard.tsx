@@ -7,6 +7,7 @@ import AssistantshipCard, { Assistantship } from "@/components/AssistantshipCard
 import { AlertTriangle, CheckCircle, Clock, FileText, Plus, Trash2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useApplications } from "@/hooks/use-applications";
+import { useApplicationsContext } from "@/context/ApplicationsContext";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,7 +21,7 @@ import {
 
 const Dashboard = () => {
   const { toast } = useToast();
-  const { applications, setApplications } = useApplications();
+  const { applications, setApplications, addApplication, isApplied } = useApplicationsContext();
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
