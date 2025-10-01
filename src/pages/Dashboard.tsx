@@ -191,37 +191,29 @@ const Dashboard = () => {
       </div>
 
       {/* Status Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="p-4 text-center">
+      <div className="flex flex-wrap justify-center gap-6">
+        <Card className="w-56 p-6 text-center">
           <div className="flex items-center justify-center mb-2">
-            <Clock className="h-5 w-5 text-warning" />
+            <Clock className="h-6 w-6 text-slate-600" />
           </div>
-          <p className="text-2xl font-bold text-foreground">{statusCounts.pending}</p>
-          <p className="text-sm text-muted-foreground">Pendientes</p>
+          <p className="text-3xl font-bold text-foreground">{statusCounts.pending}</p>
+          <p className="text-base text-muted-foreground">Pendientes</p>
         </Card>
         
-        <Card className="p-4 text-center">
+        <Card className="w-56 p-6 text-center">
           <div className="flex items-center justify-center mb-2">
-            <FileText className="h-5 w-5 text-warning" />
+            <FileText className="h-6 w-6 text-warning" />
           </div>
-          <p className="text-2xl font-bold text-foreground">{statusCounts["pre-selected"]}</p>
-          <p className="text-sm text-muted-foreground">Pre-Seleccionados</p>
+          <p className="text-3xl font-bold text-foreground">{statusCounts["pre-selected"]}</p>
+          <p className="text-base text-muted-foreground">Pre-Seleccionadas</p>
         </Card>
         
-        <Card className="p-4 text-center">
+        <Card className="w-56 p-6 text-center">
           <div className="flex items-center justify-center mb-2">
-            <CheckCircle className="h-5 w-5 text-success" />
+            <CheckCircle className="h-6 w-6 text-success" />
           </div>
-          <p className="text-2xl font-bold text-foreground">{statusCounts.accepted}</p>
-          <p className="text-sm text-muted-foreground">Aceptadas</p>
-        </Card>
-        
-        <Card className="p-4 text-center">
-          <div className="flex items-center justify-center mb-2">
-            <AlertTriangle className="h-5 w-5 text-destructive" />
-          </div>
-          <p className="text-2xl font-bold text-foreground">{statusCounts.rejected}</p>
-          <p className="text-sm text-muted-foreground">Rechazadas</p>
+          <p className="text-3xl font-bold text-foreground">{statusCounts.accepted}</p>
+          <p className="text-base text-muted-foreground">Aceptadas</p>
         </Card>
       </div>
 

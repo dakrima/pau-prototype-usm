@@ -31,9 +31,9 @@ All colors MUST be HSL.
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
 
-    /* USM Yellow - Accent (#FFCC00) */
-    --accent: 48 100% 50%;
-    --accent-foreground: 225 15% 15%;
+    /* Blue for filters and buttons */
+    --accent: 210 100% 95%;
+    --accent-foreground: 211 100% 21%;
 
     /* USM Red - Destructive (#C8102E) */
     --destructive: 349 77% 43%;

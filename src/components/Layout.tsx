@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import { Search, User, Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import usmLogo from "@/assets/usm-logo.jpg";
+import usmLogo from "@/assets/usm-logo.png";
 
 const Layout = () => {
   const location = useLocation();
@@ -25,7 +25,7 @@ const Layout = () => {
                 <img 
                   src={usmLogo} 
                   alt="USM Logo" 
-                  className="h-7 w-auto"
+                  className="h-11 w-auto"
                 />
               </Link>
               <div className="border-l border-border pl-3">
@@ -35,10 +35,10 @@ const Layout = () => {
             </div>
 
             {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-6">
+            <nav className="hidden md:flex items-center gap-6">
               <Link
                 to="/"
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 ${
                   isActive("/") 
                     ? "text-primary border-b-2 border-primary" 
                     : "text-muted-foreground hover:text-primary"
@@ -49,7 +49,7 @@ const Layout = () => {
               </Link>
               <Link
                 to="/explore"
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 ${
                   isActive("/explore") 
                     ? "text-primary border-b-2 border-primary" 
                     : "text-muted-foreground hover:text-primary"
@@ -61,18 +61,18 @@ const Layout = () => {
             </nav>
 
             {/* User Actions */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center gap-x-3">
               <Button variant="ghost" size="sm" className="relative hover:text-primary">
                 <Bell className="h-4 w-4" />
                 <Badge className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs px-1.5 py-0.5">
                   2
                 </Badge>
               </Button>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-x-2 ms-2">
                 <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                  <span className="text-sm font-medium text-primary-foreground">JS</span>
+                  <span className="text-sm font-medium text-primary-foreground">DIU</span>
                 </div>
-                <span className="hidden sm:inline text-sm font-medium text-foreground">Juan Silva</span>
+                <span className="hidden sm:inline text-sm font-medium text-foreground">David Ibañez Urrutia</span>
               </div>
               <Button variant="ghost" size="sm" className="md:hidden">
                 <Menu className="h-4 w-4" />
