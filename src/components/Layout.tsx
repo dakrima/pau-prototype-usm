@@ -10,7 +10,7 @@ const Layout = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex flex-col">
+    <div className="min-h-screen bg-gradient-subtle">
       {/* Header */}
       <header className="bg-background border-b border-border shadow-card sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -113,18 +113,9 @@ const Layout = () => {
       </nav>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 flex-1">
+      <main className="container mx-auto px-4 py-6">
         <Outlet />
       </main>
-
-      {/* Footer */}
-      <footer className="bg-primary text-primary-foreground py-6 mt-auto">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-sm font-medium">
-            Universidad Técnica Federico Santa María — Ex Umbra In Solem
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };
