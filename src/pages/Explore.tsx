@@ -1,15 +1,19 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useApplications } from "@/hooks/use-applications";
 import AssistantshipCard, { Assistantship } from "@/components/AssistantshipCard";
 import { Search, Filter, Calendar, BookOpen, Users } from "lucide-react";
 
 const Explore = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { addApplication, isApplied } = useApplications();
   
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
@@ -626,8 +630,35 @@ const Explore = () => {
   }, [searchTerm, selectedDepartment, selectedType, selectedCampus, selectedProgram, hasActiveFilters]);
 
   const handleApply = (id: string) => {
-    // Navigate to application form or open modal
-    window.location.href = `/assistantship/${id}`;
+    const assistantship = availableAssistantships.find(a => a.id === id);
+    
+    if (!assistantship) {
+      toast({
+        title: "Error",
+        description: "No se encontró la ayudantía",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (isApplied(id)) {
+      toast({
+        title: "Ya postulaste",
+        description: "Ya has postulado a esta ayudantía",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    addApplication(assistantship);
+    
+    toast({
+      title: "¡Postulación exitosa!",
+      description: `Has postulado a ${assistantship.courseName}`,
+    });
+
+    // Navigate to dashboard to see the new application
+    navigate("/");
   };
 
   const handleViewDetails = (id: string) => {
@@ -781,7 +812,7 @@ const Explore = () => {
               key={assistantship.id}
               assistantship={assistantship}
               variant="catalog"
-              onApply={handleApply}
+              onApply={isApplied(assistantship.id) ? undefined : handleApply}
               onViewDetails={handleViewDetails}
             />
           ))}

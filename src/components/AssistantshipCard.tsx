@@ -164,9 +164,14 @@ const AssistantshipCard = ({
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t border-border">
         <div className="flex space-x-2">
-          {variant === "catalog" && onApply && (
-            <Button onClick={() => onApply(assistantship.id)} size="sm">
-              Postular
+          {variant === "catalog" && (
+            <Button 
+              onClick={onApply ? () => onApply(assistantship.id) : undefined} 
+              size="sm"
+              disabled={!onApply}
+              variant={!onApply ? "secondary" : "default"}
+            >
+              {onApply ? "Postular" : "Ya Postulaste"}
             </Button>
           )}
           
