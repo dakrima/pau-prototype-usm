@@ -1,8 +1,7 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Search, User, Bell, Menu } from "lucide-react";
+import { BookOpen, Search, User, Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import usmLogo from "@/assets/usm-logo.jpg";
 
 const Layout = () => {
   const location = useLocation();
@@ -17,20 +16,12 @@ const Layout = () => {
           <div className="flex items-center justify-between">
             {/* Logo and Title */}
             <div className="flex items-center space-x-3">
-              <Link 
-                to="/" 
-                aria-label="Universidad Técnica Federico Santa María"
-                className="flex-shrink-0"
-              >
-                <img 
-                  src={usmLogo} 
-                  alt="USM Logo" 
-                  className="h-7 w-auto"
-                />
-              </Link>
-              <div className="border-l border-border pl-3">
-                <h1 className="text-xl font-bold text-primary">PAU</h1>
-                <p className="text-xs text-muted-foreground hidden sm:block">Plataforma de Ayudantías Unificada</p>
+              <div className="bg-gradient-primary p-2 rounded-lg">
+                <BookOpen className="h-6 w-6 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">PAU</h1>
+                <p className="text-sm text-muted-foreground">Plataforma de Ayudantías Unificada</p>
               </div>
             </div>
 
@@ -40,8 +31,8 @@ const Layout = () => {
                 to="/"
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
                   isActive("/") 
-                    ? "text-primary border-b-2 border-primary" 
-                    : "text-muted-foreground hover:text-primary"
+                    ? "bg-primary text-primary-foreground" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 }`}
               >
                 <User className="h-4 w-4" />
@@ -51,8 +42,8 @@ const Layout = () => {
                 to="/explore"
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
                   isActive("/explore") 
-                    ? "text-primary border-b-2 border-primary" 
-                    : "text-muted-foreground hover:text-primary"
+                    ? "bg-primary text-primary-foreground" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 }`}
               >
                 <Search className="h-4 w-4" />
@@ -62,7 +53,7 @@ const Layout = () => {
 
             {/* User Actions */}
             <div className="flex items-center space-x-3">
-              <Button variant="ghost" size="sm" className="relative hover:text-primary">
+              <Button variant="ghost" size="sm" className="relative">
                 <Bell className="h-4 w-4" />
                 <Badge className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs px-1.5 py-0.5">
                   2
@@ -72,7 +63,7 @@ const Layout = () => {
                 <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                   <span className="text-sm font-medium text-primary-foreground">JS</span>
                 </div>
-                <span className="hidden sm:inline text-sm font-medium text-foreground">Juan Silva</span>
+                <span className="hidden sm:inline text-sm font-medium">Juan Silva</span>
               </div>
               <Button variant="ghost" size="sm" className="md:hidden">
                 <Menu className="h-4 w-4" />
