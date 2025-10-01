@@ -18,25 +18,25 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 225 15% 15%;
 
-    /* USM Strong Blue - Primary */
-    --primary: 220 91% 42%;
+    /* USM Blue - Primary (#002F6C) */
+    --primary: 211 100% 21%;
     --primary-foreground: 0 0% 98%;
-    --primary-hover: 220 91% 38%;
+    --primary-hover: 211 100% 18%;
 
-    /* Light Blue Secondary */
+    /* Light Secondary */
     --secondary: 210 40% 96%;
-    --secondary-foreground: 220 91% 42%;
+    --secondary-foreground: 211 100% 21%;
 
     /* Neutral tones */
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
 
-    /* USM Yellow - Accent/Warning */
-    --accent: 45 93% 58%;
+    /* USM Yellow - Accent (#FFCC00) */
+    --accent: 48 100% 50%;
     --accent-foreground: 225 15% 15%;
 
-    /* USM Red - Destructive */
-    --destructive: 0 84% 60%;
+    /* USM Red - Destructive (#C8102E) */
+    --destructive: 349 77% 43%;
     --destructive-foreground: 0 0% 98%;
 
     /* Interface colors */
@@ -47,20 +47,20 @@ All colors MUST be HSL.
     /* Status colors */
     --success: 142 69% 58%;
     --success-foreground: 0 0% 98%;
-    --warning: 45 93% 47%;
-    --warning-foreground: 45 84% 15%;
+    --warning: 48 100% 50%;
+    --warning-foreground: 225 15% 15%;
     --info: 199 89% 48%;
     --info-foreground: 0 0% 98%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(220 91% 42%), hsl(220 91% 38%));
-    --gradient-accent: linear-gradient(135deg, hsl(45 93% 58%), hsl(45 93% 50%));
+    --gradient-primary: linear-gradient(135deg, hsl(211 100% 21%), hsl(211 100% 18%));
+    --gradient-accent: linear-gradient(135deg, hsl(48 100% 50%), hsl(48 100% 45%));
     --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 40% 98%));
 
     /* Shadows */
-    --shadow-card: 0 1px 3px 0 hsl(220 91% 42% / 0.1), 0 1px 2px 0 hsl(220 91% 42% / 0.06);
-    --shadow-hover: 0 4px 6px -1px hsl(220 91% 42% / 0.1), 0 2px 4px -1px hsl(220 91% 42% / 0.06);
-    --shadow-focus: 0 0 0 3px hsl(220 91% 42% / 0.1);
+    --shadow-card: 0 1px 3px 0 hsl(211 100% 21% / 0.1), 0 1px 2px 0 hsl(211 100% 21% / 0.06);
+    --shadow-hover: 0 4px 6px -1px hsl(211 100% 21% / 0.1), 0 2px 4px -1px hsl(211 100% 21% / 0.06);
+    --shadow-focus: 0 0 0 3px hsl(211 100% 21% / 0.1);
 
     --radius: 0.5rem;
 
@@ -93,9 +93,9 @@ All colors MUST be HSL.
     --popover-foreground: 0 0% 95%;
 
     /* USM Blue adjusted for dark */
-    --primary: 220 91% 55%;
-    --primary-foreground: 225 15% 8%;
-    --primary-hover: 220 91% 50%;
+    --primary: 211 100% 35%;
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 211 100% 30%;
 
     --secondary: 225 15% 15%;
     --secondary-foreground: 0 0% 95%;
@@ -104,12 +104,12 @@ All colors MUST be HSL.
     --muted-foreground: 215 20% 65%;
 
     /* USM Yellow adjusted for dark */
-    --accent: 45 93% 65%;
+    --accent: 48 100% 60%;
     --accent-foreground: 225 15% 8%;
 
     /* USM Red adjusted for dark */
-    --destructive: 0 84% 65%;
-    --destructive-foreground: 225 15% 8%;
+    --destructive: 349 77% 55%;
+    --destructive-foreground: 0 0% 98%;
 
     --border: 225 15% 20%;
     --input: 225 15% 20%;
@@ -118,20 +118,20 @@ All colors MUST be HSL.
     /* Status colors for dark */
     --success: 142 69% 45%;
     --success-foreground: 142 100% 8%;
-    --warning: 45 93% 65%;
-    --warning-foreground: 45 84% 8%;
+    --warning: 48 100% 60%;
+    --warning-foreground: 225 15% 8%;
     --info: 199 89% 60%;
     --info-foreground: 225 15% 8%;
 
     /* Gradients for dark */
-    --gradient-primary: linear-gradient(135deg, hsl(220 91% 55%), hsl(220 91% 50%));
-    --gradient-accent: linear-gradient(135deg, hsl(45 93% 65%), hsl(45 93% 60%));
+    --gradient-primary: linear-gradient(135deg, hsl(211 100% 35%), hsl(211 100% 30%));
+    --gradient-accent: linear-gradient(135deg, hsl(48 100% 60%), hsl(48 100% 55%));
     --gradient-subtle: linear-gradient(180deg, hsl(225 15% 8%), hsl(225 15% 10%));
 
     /* Shadows for dark */
     --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.3), 0 1px 2px 0 hsl(0 0% 0% / 0.2);
     --shadow-hover: 0 4px 6px -1px hsl(0 0% 0% / 0.3), 0 2px 4px -1px hsl(0 0% 0% / 0.2);
-    --shadow-focus: 0 0 0 3px hsl(220 91% 55% / 0.2);
+    --shadow-focus: 0 0 0 3px hsl(211 100% 35% / 0.2);
 
     --sidebar-background: 225 15% 6%;
     --sidebar-foreground: 0 0% 95%;
