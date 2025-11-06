@@ -33,6 +33,8 @@ const Dashboard = () => {
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [targetDeleteId, setTargetDeleteId] = useState<string | null>(null);
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -51,13 +53,22 @@ const Dashboard = () => {
   const handleEdit = (id: string) =>
     toast({ title: "Editar postulación", description: "Funcionalidad en desarrollo." });
 
-  const handleDelete = (id: string) => {
-    setApplications((prev) => prev.filter((app) => app.id !== id));
-    setSelectedIds((prev) => prev.filter((sid) => sid !== id));
+  // 🔒 Confirmación antes de eliminar individualmente
+  const requestDelete = (id: string) => {
+    setTargetDeleteId(id);
+    setShowDeleteDialog(true);
+  };
+
+  const confirmDelete = () => {
+    if (!targetDeleteId) return;
+    setApplications((prev) => prev.filter((app) => app.id !== targetDeleteId));
+    setSelectedIds((prev) => prev.filter((sid) => sid !== targetDeleteId));
     toast({
       title: "Postulación eliminada",
       description: "La postulación ha sido eliminada permanentemente.",
     });
+    setShowDeleteDialog(false);
+    setTargetDeleteId(null);
   };
 
   const handleSelect = (id: string, checked: boolean) => {
@@ -155,7 +166,7 @@ const Dashboard = () => {
 
       {/* Bulk Actions Bar */}
       {bulkActionStatus && (
-        <Card className="p-4 bg-accent/80 border-accent sticky top-[100px] z-40 shadow-md rounded-md backdrop-blur">
+        <Card className="p-4 bg-accent/60 border-accent sticky top-[72px] z-40 shadow-md rounded-md backdrop-blur">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-sm font-medium text-foreground">
@@ -265,7 +276,7 @@ const Dashboard = () => {
                             isDraggable
                             dragHandleProps={provided.dragHandleProps}
                             onEdit={isBulkSelecting ? undefined : handleEdit}
-                            onDelete={isBulkSelecting ? undefined : handleDelete}
+                            onDelete={isBulkSelecting ? undefined : requestDelete}
                             onViewDetails={isBulkSelecting ? undefined : handleViewDetails}
                             isSelected={selectedIds.includes(application.id)}
                             onSelect={handleSelect}
@@ -282,11 +293,32 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Bulk Delete Confirmation Dialog */}
-      <AlertDialog
-        open={showBulkDeleteDialog}
-        onOpenChange={setShowBulkDeleteDialog}
-      >
+      {/* Confirmación eliminación individual */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Seguro que deseas eliminar esta postulación?
+              <span className="block mt-2 text-destructive">
+                Esta acción no se puede deshacer.
+              </span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Confirmación eliminación masiva */}
+      <AlertDialog open={showBulkDeleteDialog} onOpenChange={setShowBulkDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar eliminación</AlertDialogTitle>
