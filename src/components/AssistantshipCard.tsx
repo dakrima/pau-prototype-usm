@@ -2,19 +2,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MapPin } from "lucide-react";
-import { 
-  Clock, 
-  User, 
-  BookOpen, 
-  Edit, 
-  Trash2, 
-  GripVertical,
-  ExternalLink,
-  CalendarDays
-} from "lucide-react";
+import { MapPin, Clock, User, BookOpen, GripVertical, ExternalLink, MoreVertical, Edit, Trash2, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 export interface Assistantship {
   id: string;
@@ -29,7 +19,7 @@ export interface Assistantship {
   requirements: string[];
   description: string;
   applicationDeadline: string;
-  status?: "pending" | "pre-selected" | "accepted" | "rejected";
+  status?: "pending" | "pre-selected" | "accepted" | "rejected" | "renounced";
 }
 
 interface AssistantshipCardProps {
@@ -63,17 +53,18 @@ const AssistantshipCard = ({
   isSelected = false,
   onSelect,
 }: AssistantshipCardProps) => {
-  const { toast } = useToast();
   const getStatusBadge = (status?: string) => {
     switch (status) {
       case "pending":
-        return <Badge className="bg-gray-500 text-white text-sm font-medium px-2 py-1 rounded cursor-default pointer-events-none">Postulación realizada</Badge>;
+        return <Badge className="bg-gray-500 text-white">Postulación realizada</Badge>;
       case "pre-selected":
-        return <Badge className="bg-yellow-500 text-white text-sm font-medium px-2 py-1 rounded cursor-default pointer-events-none">Pre-Seleccionado</Badge>;
+        return <Badge className="bg-yellow-500 text-white">Pre-Seleccionado</Badge>;
       case "accepted":
-        return <Badge className="bg-green-500 text-white text-sm font-medium px-2 py-1 rounded cursor-default pointer-events-none">Aceptada</Badge>;
+        return <Badge className="bg-green-500 text-white">Aceptada</Badge>;
       case "rejected":
-        return <Badge className="bg-red-500 text-white text-sm font-medium px-2 py-1 rounded cursor-default pointer-events-none">Rechazada</Badge>;
+        return <Badge className="bg-red-500 text-white">Rechazada</Badge>;
+      case "renounced":
+        return <Badge className="bg-orange-500 text-white">Renunciada</Badge>;
       default:
         return null;
     }
@@ -97,30 +88,32 @@ const AssistantshipCard = ({
   };
 
   return (
-    <Card className={cn(
-      "p-6 shadow-card card-hover transition-all duration-200",
-      variant === "application" && "bg-gradient-subtle",
-      isSelected && "ring-2 ring-primary"
-    )}>
+    <Card
+      className={cn(
+        "p-6 shadow-card card-hover transition-all duration-200",
+        variant === "application" && "bg-gradient-subtle",
+        isSelected && "ring-2 ring-primary"
+      )}
+    >
       <div className="flex items-start justify-between gap-4">
-        {/* Checkbox for selection */}
+        {/* Checkbox de selección */}
         {variant === "application" && onSelect && (
           <div className="mt-1">
-            <Checkbox 
+            <Checkbox
               checked={isSelected}
               onCheckedChange={(checked) => onSelect(assistantship.id, checked as boolean)}
             />
           </div>
         )}
 
-        {/* Drag Handle */}
+        {/* Manejador de arrastre */}
         {isDraggable && (
           <div {...dragHandleProps} className="drag-handle mt-1">
             <GripVertical className="h-4 w-4" />
           </div>
         )}
 
-        {/* Content */}
+        {/* Contenido principal */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-3">
             <div>
@@ -161,12 +154,12 @@ const AssistantshipCard = ({
         </div>
       </div>
 
-      {/* Actions */}
+      {/* Acciones */}
       <div className="flex items-center justify-between pt-4 border-t border-border">
         <div className="flex space-x-2">
           {variant === "catalog" && (
-            <Button 
-              onClick={onApply ? () => onApply(assistantship.id) : undefined} 
+            <Button
+              onClick={onApply ? () => onApply(assistantship.id) : undefined}
               size="sm"
               disabled={!onApply}
               variant={!onApply ? "secondary" : "default"}
@@ -174,47 +167,60 @@ const AssistantshipCard = ({
               {onApply ? "Postular" : "Ya Postulaste"}
             </Button>
           )}
-          
+
           {variant === "application" && (
             <>
-              {onEdit && (
-                <Button 
-                  onClick={() => onEdit(assistantship.id)} 
-                  variant="outline" 
-                  size="sm"
-                >
-                  <Edit className="h-3 w-3 mr-1" />
-                  Editar
-                </Button>
+              {/* Menú ⋮ */}
+              {(onEdit || onDelete || onResign) && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full">
+                      <MoreVertical className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent align="start">
+                    {/* Editar siempre visible */}
+                    {onEdit && (
+                      <DropdownMenuItem onClick={() => onEdit(assistantship.id)}>
+                        <Edit className="h-4 w-4 mr-2" /> Editar
+                      </DropdownMenuItem>
+                    )}
+
+                    {/* Si está aceptada, solo mostrar Renunciar */}
+                    {assistantship.status === "accepted" && onResign && (
+                      <DropdownMenuItem
+                        onClick={() => onResign(assistantship.id)}
+                        className="text-destructive"
+                      >
+                        <LogOut className="h-4 w-4 mr-2" /> Renunciar
+                      </DropdownMenuItem>
+                    )}
+
+                    {/* Si no está aceptada ni renunciada, permitir eliminar */}
+                    {assistantship.status !== "accepted" &&
+                      assistantship.status !== "renounced" &&
+                      onDelete && (
+                        <DropdownMenuItem onClick={() => onDelete(assistantship.id)}>
+                          <Trash2 className="h-4 w-4 mr-2" /> Eliminar
+                        </DropdownMenuItem>
+                      )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
 
-              {/* Pending status: Only Delete button */}
-              {assistantship.status === "pending" && onDelete && (
-                <Button 
-                  onClick={() => onDelete(assistantship.id)} 
-                  variant="destructive" 
-                  size="sm"
-                >
-                  <Trash2 className="h-3 w-3 mr-1" />
-                  Eliminar
-                </Button>
-              )}
-
-              {/* Pre-Selected status: Accept and Reject buttons */}
+              {/* Pre-Seleccionado: Aceptar / Rechazar */}
               {assistantship.status === "pre-selected" && (
                 <>
                   {onAccept && (
-                    <Button 
-                      onClick={() => onAccept(assistantship.id)} 
-                      size="sm"
-                    >
+                    <Button onClick={() => onAccept(assistantship.id)} size="sm">
                       Aceptar
                     </Button>
                   )}
                   {onReject && (
-                    <Button 
-                      onClick={() => onReject(assistantship.id)} 
-                      variant="destructive" 
+                    <Button
+                      onClick={() => onReject(assistantship.id)}
+                      variant="destructive"
                       size="sm"
                     >
                       Rechazar
@@ -222,37 +228,14 @@ const AssistantshipCard = ({
                   )}
                 </>
               )}
-
-              {/* Accepted status: Resign button */}
-              {assistantship.status === "accepted" && onResign && (
-                <Button 
-                  onClick={() => onResign(assistantship.id)} 
-                  variant="destructive" 
-                  size="sm"
-                >
-                  Renunciar
-                </Button>
-              )}
-
-              {/* Rejected status: Only Delete button */}
-              {assistantship.status === "rejected" && onDelete && (
-                <Button 
-                  onClick={() => onDelete(assistantship.id)} 
-                  variant="destructive" 
-                  size="sm"
-                >
-                  <Trash2 className="h-3 w-3 mr-1" />
-                  Eliminar
-                </Button>
-              )}
             </>
           )}
         </div>
 
         {onViewDetails && (
-          <Button 
-            onClick={() => onViewDetails(assistantship.id)} 
-            variant="ghost" 
+          <Button
+            onClick={() => onViewDetails(assistantship.id)}
+            variant="ghost"
             size="sm"
           >
             Ver más <ExternalLink className="h-3 w-3 ml-1" />

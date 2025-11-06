@@ -116,6 +116,20 @@ const Dashboard = () => {
   });
 
   const statusCounts = getStatusCounts();
+  
+  const handleResign = (id: string) => {
+  setApplications((prev) =>
+    prev.map((app) =>
+      app.id === id ? { ...app, status: "renounced" } : app
+    )
+  );
+
+  toast({
+    title: "Has renunciado a la ayudantía",
+    description: "Tu estado ahora es 'Renunciada'.",
+  });
+};
+
 
   return (
     <div className="space-y-6">
@@ -278,6 +292,7 @@ const Dashboard = () => {
                             onEdit={isBulkSelecting ? undefined : handleEdit}
                             onDelete={isBulkSelecting ? undefined : requestDelete}
                             onViewDetails={isBulkSelecting ? undefined : handleViewDetails}
+                            onResign={handleResign} 
                             isSelected={selectedIds.includes(application.id)}
                             onSelect={handleSelect}
                           />
