@@ -197,14 +197,12 @@ const AssistantshipCard = ({
                       </DropdownMenuItem>
                     )}
 
-                    {/* Si no está aceptada ni renunciada, permitir eliminar */}
-                    {assistantship.status !== "accepted" &&
-                      assistantship.status !== "renounced" &&
-                      onDelete && (
-                        <DropdownMenuItem onClick={() => onDelete(assistantship.id)}>
-                          <Trash2 className="h-4 w-4 mr-2" /> Eliminar
-                        </DropdownMenuItem>
-                      )}
+                    {/* Permitir eliminar excepto cuando está aceptada */}
+                    {assistantship.status !== "accepted" && onDelete && (
+                      <DropdownMenuItem onClick={() => onDelete(assistantship.id)}>
+                        <Trash2 className="h-4 w-4 mr-2" /> Eliminar
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}

@@ -35,6 +35,8 @@ const Dashboard = () => {
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [targetDeleteId, setTargetDeleteId] = useState<string | null>(null);
+  const [showResignDialog, setShowResignDialog] = useState(false);
+  const [targetResignId, setTargetResignId] = useState<string | null>(null);
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -117,19 +119,28 @@ const Dashboard = () => {
 
   const statusCounts = getStatusCounts();
   
-  const handleResign = (id: string) => {
-  setApplications((prev) =>
-    prev.map((app) =>
-      app.id === id ? { ...app, status: "renounced" } : app
-    )
-  );
+  const requestResign = (id: string) => {
+    setTargetResignId(id);
+    setShowResignDialog(true);
+  };
 
-  toast({
-    title: "Has renunciado a la ayudantía",
-    description: "Tu estado ahora es 'Renunciada'.",
-  });
-};
+  const confirmResign = () => {
+    if (!targetResignId) return;
 
+    setApplications((prev) =>
+      prev.map((app) =>
+        app.id === targetResignId ? { ...app, status: "renounced" } : app
+      )
+    );
+
+    toast({
+      title: "Has renunciado a la ayudantía",
+      description: "Tu estado ahora es 'Renunciada'.",
+    });
+
+    setShowResignDialog(false);
+    setTargetResignId(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -292,7 +303,7 @@ const Dashboard = () => {
                             onEdit={isBulkSelecting ? undefined : handleEdit}
                             onDelete={isBulkSelecting ? undefined : requestDelete}
                             onViewDetails={isBulkSelecting ? undefined : handleViewDetails}
-                            onResign={handleResign} 
+                            onResign={isBulkSelecting ? undefined : requestResign}
                             isSelected={selectedIds.includes(application.id)}
                             onSelect={handleSelect}
                           />
@@ -351,6 +362,30 @@ const Dashboard = () => {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Confirmación renuncia */}
+      <AlertDialog open={showResignDialog} onOpenChange={setShowResignDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar renuncia</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Seguro que deseas renunciar a esta ayudantía aceptada?
+              <span className="block mt-2 text-muted-foreground">
+                Volverá a aparecer como "Renunciada" en tu lista.
+              </span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmResign}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Renunciar
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
