@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import AssistantshipCard from "@/components/AssistantshipCard";
+import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   CheckCircle,
   Clock,
@@ -26,6 +28,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from "@/components/ui/dropdown-menu";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -160,34 +169,7 @@ const Dashboard = () => {
         </Link>
       </div>
 
-      {/* Status Overview */}
-      <div className="flex flex-wrap justify-center gap-6">
-        <Card className="w-56 p-6 text-center">
-          <div className="flex items-center justify-center mb-2">
-            <Clock className="h-6 w-6 text-slate-600" />
-          </div>
-          <p className="text-3xl font-bold text-foreground">{statusCounts.pending}</p>
-          <p className="text-base text-muted-foreground">Pendientes</p>
-        </Card>
-
-        <Card className="w-56 p-6 text-center">
-          <div className="flex items-center justify-center mb-2">
-            <FileText className="h-6 w-6 text-warning" />
-          </div>
-          <p className="text-3xl font-bold text-foreground">
-            {statusCounts["pre-selected"]}
-          </p>
-          <p className="text-base text-muted-foreground">Pre-Seleccionadas</p>
-        </Card>
-
-        <Card className="w-56 p-6 text-center">
-          <div className="flex items-center justify-center mb-2">
-            <CheckCircle className="h-6 w-6 text-success" />
-          </div>
-          <p className="text-3xl font-bold text-foreground">{statusCounts.accepted}</p>
-          <p className="text-base text-muted-foreground">Aceptadas</p>
-        </Card>
-      </div>
+      
 
       {/* Bulk Actions Bar */}
       {bulkActionStatus && (
@@ -248,74 +230,176 @@ const Dashboard = () => {
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="applications">
               {(provided) => (
-                <div
-                  {...provided.droppableProps}
+                <table
                   ref={provided.innerRef}
-                  className="space-y-3"
+                  {...provided.droppableProps}
+                  className="w-full text-left border-collapse"
                 >
-                  {applications.map((application, index) => (
-                    <Draggable
-                      key={application.id}
-                      draggableId={application.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className={`${
-                            snapshot.isDragging ? "shadow-hover rotate-1" : ""
-                          }`}
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-base font-semibold text-primary">
-                                Prioridad #{index + 1}
+                  <thead>
+                    <tr className="border-b bg-muted/30">
+                      
+                      {/* Checkbox global */}
+                      <th className="p-3 w-10">
+                      <Checkbox
+                        checked={
+                          selectedIds.length === applications.length
+                            ? true
+                            : selectedIds.length === 0
+                            ? false
+                            : "indeterminate"
+                        }
+                        onCheckedChange={(checked) =>
+                          checked
+                            ? setSelectedIds(applications.map((a) => a.id))
+                            : setSelectedIds([])
+                        }
+                      />
+
+                      </th>
+
+                      <th className="p-3 font-semibold">#</th>
+                      <th className="p-3 font-semibold">Curso</th>
+                      <th className="p-3 font-semibold">Profesor</th>
+                      <th className="p-3 font-semibold">Horas</th>
+                      <th className="p-3 font-semibold">Tipo</th>
+                      <th className="p-3 font-semibold">Estado</th>
+                      <th className="p-3 font-semibold text-right">Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {applications.map((app, index) => (
+                      <Draggable key={app.id} draggableId={app.id} index={index}>
+                        {(provided, snapshot) => (
+                          <tr
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={cn(
+                              "border-b transition-colors",
+                              snapshot.isDragging && "bg-accent/40 shadow-md"
+                            )}
+                          >
+                            {/* Checkbox por fila */}
+                            <td className="p-3 w-10">
+                              <Checkbox
+                                checked={selectedIds.includes(app.id)}
+                                onCheckedChange={(checked) =>
+                                  handleSelect(app.id, checked as boolean)
+                                }
+                              />
+                            </td>
+
+                            {/* Drag handle + prioridad */}
+                            <td className="p-3 font-bold w-24">
+                              <div className="flex items-center gap-2">
+
+                                <div
+                                  {...provided.dragHandleProps}
+                                  className="cursor-grab active:cursor-grabbing opacity-70 hover:opacity-100"
+                                >
+                                  ⋮⋮
+                                </div>
+
+                                #{index + 1}
+                              </div>
+                            </td>
+
+                            <td className="p-3">{app.courseName}</td>
+                            <td className="p-3">{app.professor}</td>
+                            <td className="p-3">{app.hours}h</td>
+                            <td className="p-3 capitalize">{app.type}</td>
+
+                            <td className="p-3">
+                              <span
+                                className={cn(
+                                  "px-2 py-1 rounded text-xs font-medium",
+                                  app.status === "pending" && "bg-gray-200 text-gray-700",
+                                  app.status === "pre-selected" && "bg-yellow-200 text-yellow-700",
+                                  app.status === "accepted" && "bg-green-200 text-green-700",
+                                  app.status === "rejected" && "bg-red-200 text-red-700",
+                                  app.status === "renounced" && "bg-purple-200 text-purple-700"
+                                )}
+                              >
+                                {app.status}
                               </span>
-                              <div className="flex gap-1">
+                            </td>
+
+                            <td className="p-3 text-right">
+
+                              <div className="flex justify-end gap-1">
+
+                                {/* Flecha arriba */}
                                 <Button
                                   variant="outline"
                                   size="icon"
                                   disabled={index === 0}
                                   onClick={() => handleMoveUp(index)}
-                                  className="h-9 w-9 rounded-full border-primary/30 hover:bg-primary/10 transition-colors"
+                                  className="h-8 w-8"
                                 >
-                                  <ChevronUp className="h-5 w-5 text-primary" />
+                                  <ChevronUp className="h-4 w-4" />
                                 </Button>
+
+                                {/* Flecha abajo */}
                                 <Button
                                   variant="outline"
                                   size="icon"
                                   disabled={index === applications.length - 1}
                                   onClick={() => handleMoveDown(index)}
-                                  className="h-9 w-9 rounded-full border-primary/30 hover:bg-primary/10 transition-colors"
+                                  className="h-8 w-8"
                                 >
-                                  <ChevronDown className="h-5 w-5 text-primary" />
+                                  <ChevronDown className="h-4 w-4" />
                                 </Button>
-                              </div>
-                            </div>
-                          </div>
 
-                          <AssistantshipCard
-                            assistantship={application}
-                            variant="application"
-                            isDraggable
-                            dragHandleProps={provided.dragHandleProps}
-                            onEdit={isBulkSelecting ? undefined : handleEdit}
-                            onDelete={isBulkSelecting ? undefined : requestDelete}
-                            onViewDetails={isBulkSelecting ? undefined : handleViewDetails}
-                            onResign={isBulkSelecting ? undefined : requestResign}
-                            isSelected={selectedIds.includes(application.id)}
-                            onSelect={handleSelect}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
+                                {/* Dropdown Menu */}
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                      ⋮
+                                    </Button>
+                                  </DropdownMenuTrigger>
+
+                                  <DropdownMenuContent align="end" className="w-44">
+
+                                    <DropdownMenuItem onClick={() => handleViewDetails(app.id)}>
+                                      Ver detalles
+                                    </DropdownMenuItem>
+
+                                    <DropdownMenuItem onClick={() => handleEdit(app.id)}>
+                                      Editar
+                                    </DropdownMenuItem>
+
+                                    {app.status === "accepted" && (
+                                      <DropdownMenuItem
+                                        onClick={() => requestResign(app.id)}
+                                        className="text-red-600"
+                                      >
+                                        Renunciar
+                                      </DropdownMenuItem>
+                                    )}
+
+                                    {app.status !== "accepted" && (
+                                      <DropdownMenuItem
+                                        onClick={() => requestDelete(app.id)}
+                                        className="text-red-600"
+                                      >
+                                        Eliminar
+                                      </DropdownMenuItem>
+                                    )}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </tbody>
+                </table>
               )}
             </Droppable>
           </DragDropContext>
+
         </div>
       )}
 
