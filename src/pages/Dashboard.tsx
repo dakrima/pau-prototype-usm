@@ -36,6 +36,24 @@ import {
   DropdownMenuItem
 } from "@/components/ui/dropdown-menu";
 
+const translateStatus = (status?: string) => {
+  switch (status) {
+    case "pending":
+      return "Pendiente";
+    case "pre-selected":
+      return "Pre-seleccionada";
+    case "accepted":
+      return "Aceptada";
+    case "rejected":
+      return "Rechazada";
+    case "renounced":
+      return "Renunciada";
+    default:
+      return status;
+  }
+};
+
+
 const Dashboard = () => {
   const { toast } = useToast();
   const { applications, setApplications } = useApplicationsContext();
@@ -64,7 +82,7 @@ const Dashboard = () => {
   const handleEdit = (id: string) =>
     toast({ title: "Editar postulación", description: "Funcionalidad en desarrollo." });
 
-  // 🔒 Confirmación antes de eliminar individualmente
+  //Confirmación antes de eliminar individualmente
   const requestDelete = (id: string) => {
     setTargetDeleteId(id);
     setShowDeleteDialog(true);
@@ -320,7 +338,8 @@ const Dashboard = () => {
                                   app.status === "renounced" && "bg-purple-200 text-purple-700"
                                 )}
                               >
-                                {app.status}
+                                {translateStatus(app.status)}
+
                               </span>
                             </td>
 
