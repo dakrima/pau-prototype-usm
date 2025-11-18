@@ -171,11 +171,11 @@ const Dashboard = () => {
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case "theoretical":
+      case "Theoretical":
         return "Contacto";
       case "Grader":
         return "Corrector";
-      case "laboratory":
+      case "Laboratory":
         return "Laboratorio";
       case "Research":
         return "Investigación";
