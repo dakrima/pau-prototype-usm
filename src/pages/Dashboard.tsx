@@ -169,6 +169,23 @@ const Dashboard = () => {
     setTargetResignId(null);
   };
 
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case "theoretical":
+        return "Contacto";
+      case "Grader":
+        return "Corrector";
+      case "laboratory":
+        return "Laboratorio";
+      case "Research":
+        return "Investigación";
+      case "Administrative":
+        return "Administrativa";
+      default:
+        return type;
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -324,8 +341,8 @@ const Dashboard = () => {
 
                             <td className="p-3">{app.courseName}</td>
                             <td className="p-3">{app.professor}</td>
-                            <td className="p-3">{app.hours}h</td>
-                            <td className="p-3 capitalize">{app.type}</td>
+                            <td className="p-3">{app.hours} hrs.</td>
+                            <td className="p-3 capitalize">{getTypeLabel(app.type)}</td>
 
                             <td className="p-3">
                               <span
