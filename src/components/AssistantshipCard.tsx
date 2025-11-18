@@ -14,7 +14,7 @@ export interface Assistantship {
   department: string;
   program: string;
   campus: string;
-  type: "theoretical" | "laboratory" | "Research" | "administrative" | "Grader";
+  type: "Theoretical" | "Laboratory" | "Research" | "Administrative" | "Grader";
   hours: number;
   requirements: string[];
   description: string;
