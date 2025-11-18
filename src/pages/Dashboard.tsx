@@ -297,6 +297,7 @@ const Dashboard = () => {
                       <th className="p-3 font-semibold">Profesor</th>
                       <th className="p-3 font-semibold">Horas</th>
                       <th className="p-3 font-semibold">Tipo</th>
+                      <th className="p-3 font-semibold">Campus</th>
                       <th className="p-3 font-semibold">Estado</th>
                       <th className="p-3 font-semibold text-right">Acciones</th>
                     </tr>
@@ -343,6 +344,7 @@ const Dashboard = () => {
                             <td className="p-3">{app.professor}</td>
                             <td className="p-3">{app.hours} hrs.</td>
                             <td className="p-3 capitalize">{getTypeLabel(app.type)}</td>
+                            <td className="p-3">{app.campus}</td>
 
                             <td className="p-3">
                               <span
